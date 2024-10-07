@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Coba1Submission"
         tools:targetApi="31">
         <activity
+            android:name=".ui.details.DetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name">
