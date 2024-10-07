@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">coba1Submission</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Active</string>
+    <string name="title_notifications">Finished</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dicoding_event">Dicoding Event</string>
+    <string name="coba_reuse">Dicoding Event</string>
+    <string name="subtitle">Recomendation event for you!</string>
+
+    <string name="text_1">Hello World!</string>
+    <string name="text_2">Welcome to Android</string>
+    <string name="text_3">Learning RecyclerView</string>
+    <string name="text_4">Using ViewBinding</string>
+    <string name="text_5">This is a Fragment Example</string>
+</resources>
