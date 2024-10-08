@@ -14,5 +14,6 @@
     <string name="text_3">Learning RecyclerView</string>
     <string name="text_4">Using ViewBinding</string>
     <string name="text_5">This is a Fragment Example</string>
-    <string name="ini_text">ini text</string>
+    <string name="ini_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</string>
+    <string name="register">Register</string>
 </resources>

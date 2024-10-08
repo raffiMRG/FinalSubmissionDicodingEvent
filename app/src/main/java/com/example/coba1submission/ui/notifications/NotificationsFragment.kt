@@ -41,9 +41,9 @@ class NotificationsFragment : Fragment() {
             setReviewData(events)
         }
 
-//        dashboardViewModel.isLoading.observe(viewLifecycleOwner) {
-//            showLoading(it)
-//        }
+        NotificationViewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it)
+        }
 
         NotificationViewModel.findRestaurant()
 
@@ -70,9 +70,9 @@ class NotificationsFragment : Fragment() {
         binding.rvReview.adapter = adapter
     }
 
-//    private fun showLoading(isLoading: Boolean) {
-//        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-//    }
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
