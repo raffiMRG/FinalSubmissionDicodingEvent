@@ -1,5 +1,6 @@
-package com.example.coba1submission.ui.dashboard
+package com.example.coba1submission.ui.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,8 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.coba1submission.data.response.ListEventsItem
 import com.example.coba1submission.databinding.ItemRowBinding
+import com.example.coba1submission.ui.details.DetailsActivity
 
-class EventAdapter : ListAdapter<ListEventsItem, EventAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class Adapter : ListAdapter<ListEventsItem, Adapter.MyViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ItemRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
@@ -17,6 +19,13 @@ class EventAdapter : ListAdapter<ListEventsItem, EventAdapter.MyViewHolder>(DIFF
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val review = getItem(position)
         holder.bind(review)
+
+        // Menambahkan OnClickListener pada item
+//        holder.itemView.setOnClickListener {
+//            val intentDetail = Intent(holder.itemView.context, DetailActivity::class.java)
+//            // Anda bisa menggunakan Parcelable atau Serializable untuk mengirimkan data yang lebih kompleks
+//            intentDetail.putExtra("key_review", review)
+//            holder.itemView.context.startActivity(intentDetail)
     }
     class MyViewHolder(val binding: ItemRowBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(review: ListEventsItem){
@@ -24,6 +33,11 @@ class EventAdapter : ListAdapter<ListEventsItem, EventAdapter.MyViewHolder>(DIFF
             Glide.with(binding.root)
                 .load("${review.mediaCover}")
                 .into(binding.recImage)
+            this.itemView.setOnClickListener{
+                val intentDetail = Intent(this.itemView.context, DetailsActivity::class.java)
+                intentDetail.putExtra("key_hero", review)
+                this.itemView.context.startActivity(intentDetail)
+            }
         }
     }
     companion object {

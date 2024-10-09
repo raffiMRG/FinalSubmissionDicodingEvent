@@ -1,13 +1,19 @@
 package com.example.coba1submission
 
+import android.content.ClipData.Item
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.coba1submission.databinding.ActivityMainBinding
+import com.example.coba1submission.ui.search.SearchActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,5 +38,23 @@ class MainActivity : AppCompatActivity() {
 //        val welcomeText = getString(R.string.coba_reuse)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_home, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_search -> {
+                // Intent ke Activity tujuan
+                val intent = Intent(this, SearchActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

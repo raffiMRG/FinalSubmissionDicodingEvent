@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.coba1submission.data.response.EventResponse
 import com.example.coba1submission.data.response.ListEventsItem
 import com.example.coba1submission.databinding.FragmentDashboardBinding
+import com.example.coba1submission.ui.adapter.Adapter
+
 //import com.example.coba1submission.ui.dashboard
 
 //import com.example.yourapplication.databinding.FragmentDashboardBinding
@@ -43,9 +43,9 @@ class DashboardFragment : Fragment() {
             setReviewData(events)
         }
 
-//        dashboardViewModel.isLoading.observe(viewLifecycleOwner) {
-//            showLoading(it)
-//        }
+        dashboardViewModel.isLoading.observe(viewLifecycleOwner) {
+            showLoading(it)
+        }
 
         dashboardViewModel.findRestaurant()
 
@@ -67,14 +67,14 @@ class DashboardFragment : Fragment() {
 //    }
 
     private fun setReviewData(events: List<ListEventsItem>) {
-        val adapter = EventAdapter()
+        val adapter = Adapter()
         adapter.submitList(events)
         binding.rvReview.adapter = adapter
     }
 
-//    private fun showLoading(isLoading: Boolean) {
-//        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-//    }
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

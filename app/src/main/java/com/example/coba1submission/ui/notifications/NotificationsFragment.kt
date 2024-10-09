@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.coba1submission.data.response.ListEventsItem
 import com.example.coba1submission.databinding.FragmentNotificationsBinding
+import com.example.coba1submission.ui.adapter.Adapter
 
 class NotificationsFragment : Fragment() {
 
@@ -65,7 +65,7 @@ class NotificationsFragment : Fragment() {
 //    }
 
     private fun setReviewData(events: List<ListEventsItem>) {
-        val adapter = NotificationAdapter()
+        val adapter = Adapter()
         adapter.submitList(events)
         binding.rvReview.adapter = adapter
     }
