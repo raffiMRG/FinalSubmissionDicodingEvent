@@ -1,4 +1,5 @@
-package com.example.coba1submission.ui.dashboard
+package com.example.coba1submission.ui.finished
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,63 +9,41 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coba1submission.data.response.ListEventsItem
-import com.example.coba1submission.databinding.FragmentDashboardBinding
+import com.example.coba1submission.databinding.FragmentNotificationsBinding
 import com.example.coba1submission.ui.adapter.Adapter
 
-//import com.example.coba1submission.ui.dashboard
+class FinishedFragment : Fragment() {
 
-//import com.example.yourapplication.databinding.FragmentDashboardBinding
-
-class DashboardFragment : Fragment() {
-
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentNotificationsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var NotificationViewModel: FinishedViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
+        NotificationViewModel = ViewModelProvider(this).get(FinishedViewModel::class.java)
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
-//==================================
+        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
 
         val layoutManager = LinearLayoutManager(requireContext())
+
         binding.rvReview.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(requireContext(), layoutManager.orientation)
         binding.rvReview.addItemDecoration(itemDecoration)
 
-//        dashboardViewModel.restaurant.observe(viewLifecycleOwner) { restaurant ->
-//            setRestaurantData(restaurant)
-//        }
-
-        dashboardViewModel.listEvents.observe(viewLifecycleOwner) { events ->
+        NotificationViewModel.listEvents.observe(viewLifecycleOwner) { events ->
             setReviewData(events)
         }
 
-        dashboardViewModel.isLoading.observe(viewLifecycleOwner) {
+        NotificationViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
 
-        dashboardViewModel.findRestaurant()
+        NotificationViewModel.findRestaurant()
 
-
-// ===========================================
         return binding.root
     }
-
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//
-//
-//
-//    }
-
-//    private fun setRestaurantData(restaurant: EventResponse) {
-//        binding.tvTitle.text = restaurant.message
-//    }
 
     private fun setReviewData(events: List<ListEventsItem>) {
         val adapter = Adapter()

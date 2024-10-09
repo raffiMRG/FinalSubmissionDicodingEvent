@@ -6,16 +6,10 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
-import com.example.coba1submission.R
 import com.example.coba1submission.data.response.ListEventsItem
 import com.example.coba1submission.databinding.ActivityDetailsBinding
-import com.example.coba1submission.databinding.ActivityMainBinding
-import com.example.coba1submission.databinding.FragmentDashboardBinding
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
@@ -33,17 +27,13 @@ class DetailsActivity : AppCompatActivity() {
         } else {
             @Suppress("DEPRECATION")
             intent.getParcelableExtra<ListEventsItem>("key_hero")
-//            intent.getSerializableExtra("key_review") as? ListEventsItem
         }
 
-        // Ganti teks dari TextView dengan ID 'text'
-//        binding.text.text = "Teks baru dari View Binding!"
         val document: Document = Jsoup.parse(dataEvent?.description)
         document.select("img").remove() // Menghapus semua tag <img>
         val descriptionWithoutImages = document.html()
 
         var description = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            Html.fromHtml(dataEvent?.description, Html.FROM_HTML_MODE_LEGACY).replace(Regex("<img[^>]*>"), "")
             Html.fromHtml(descriptionWithoutImages, Html.FROM_HTML_MODE_LEGACY)
         } else {
             Html.fromHtml(descriptionWithoutImages)

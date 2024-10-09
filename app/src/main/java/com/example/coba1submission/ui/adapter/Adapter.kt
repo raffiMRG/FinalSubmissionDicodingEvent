@@ -19,14 +19,8 @@ class Adapter : ListAdapter<ListEventsItem, Adapter.MyViewHolder>(DIFF_CALLBACK)
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val review = getItem(position)
         holder.bind(review)
-
-        // Menambahkan OnClickListener pada item
-//        holder.itemView.setOnClickListener {
-//            val intentDetail = Intent(holder.itemView.context, DetailActivity::class.java)
-//            // Anda bisa menggunakan Parcelable atau Serializable untuk mengirimkan data yang lebih kompleks
-//            intentDetail.putExtra("key_review", review)
-//            holder.itemView.context.startActivity(intentDetail)
     }
+
     class MyViewHolder(val binding: ItemRowBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(review: ListEventsItem){
             binding.eventTitle.text = "${review.name}"

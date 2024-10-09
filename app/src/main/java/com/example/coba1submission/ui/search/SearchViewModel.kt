@@ -41,7 +41,6 @@ class SearchViewModel : ViewModel() {
     fun findEvent(keyword: String) {
         _isLoading.value = true
 
-        // Panggil API dengan parameter active dan q
         val client = ApiConfig.getApiSearch().getsearchEvents(ACTIVE, keyword)
         client.enqueue(object : Callback<EventResponse> {
             override fun onResponse(
@@ -66,31 +65,4 @@ class SearchViewModel : ViewModel() {
             }
         })
     }
-
-
-//    fun findRestaurant() {
-//        _isLoading.value = true
-//        val client = ApiConfig.getApiService().getActiveEvents(ACTIVE)
-//        client.enqueue(object : Callback<EventResponse> {
-//            override fun onResponse(
-//                call: Call<EventResponse>,
-//                response: Response<EventResponse>
-//            ) {
-//                _isLoading.value = false
-//                if (response.isSuccessful) {
-//                    response.body()?.let {
-//                        _restaurant.value = it
-//                        _listEvents.value = it.listEvents
-//                    }
-//                } else {
-//                    Log.e(TAG, "onFailure: ${response.message()}")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<EventResponse>, t: Throwable) {
-//                _isLoading.value = false
-//                Log.e(TAG, "onFailure: ${t.message}")
-//            }
-//        })
-//    }
 }

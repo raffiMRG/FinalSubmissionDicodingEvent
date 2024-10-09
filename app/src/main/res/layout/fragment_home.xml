@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.dashboard.DashboardFragment">
+    tools:context=".ui.active.ActiveFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/label"
@@ -37,23 +37,3 @@
             app:layout_constraintTop_toBottomOf="@id/title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-<!--<LinearLayout-->
-<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    android:orientation="horizontal">-->
-
-<!--    <FrameLayout-->
-<!--        android:id="@+id/container_notification"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_weight="1"/>-->
-
-<!--    <FrameLayout-->
-<!--        android:id="@+id/container_details"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_weight="1"/>-->
-<!--</LinearLayout>-->

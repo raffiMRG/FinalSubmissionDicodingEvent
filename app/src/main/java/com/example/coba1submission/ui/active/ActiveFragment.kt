@@ -1,5 +1,4 @@
-package com.example.coba1submission.ui.notifications
-
+package com.example.coba1submission.ui.active
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,60 +8,46 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coba1submission.data.response.ListEventsItem
-import com.example.coba1submission.databinding.FragmentNotificationsBinding
+import com.example.coba1submission.databinding.FragmentDashboardBinding
 import com.example.coba1submission.ui.adapter.Adapter
 
-class NotificationsFragment : Fragment() {
+class ActiveFragment : Fragment() {
 
-    private var _binding: FragmentNotificationsBinding? = null
+    private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
-    private lateinit var NotificationViewModel: NotificationsViewModel
+    private lateinit var activeViewModel: ActiveViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        NotificationViewModel = ViewModelProvider(this).get(NotificationsViewModel::class.java)
+        // instansiasi model untuk fragment
+        activeViewModel = ViewModelProvider(this).get(ActiveViewModel::class.java)
 
-        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
-//==================================
+        // binding untuk fragment
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
+        // buat layout manager untuk resicle view dengan model Linear (simple standar)
         val layoutManager = LinearLayoutManager(requireContext())
-//        val layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.rvReview.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(requireContext(), layoutManager.orientation)
         binding.rvReview.addItemDecoration(itemDecoration)
 
-//        dashboardViewModel.restaurant.observe(viewLifecycleOwner) { restaurant ->
-//            setRestaurantData(restaurant)
-//        }
-
-        NotificationViewModel.listEvents.observe(viewLifecycleOwner) { events ->
+        // atur list event yang akan di masukan kedalam adapter
+        activeViewModel.listEvents.observe(viewLifecycleOwner) { events ->
             setReviewData(events)
         }
 
-        NotificationViewModel.isLoading.observe(viewLifecycleOwner) {
+        // atur progres bar (loading) agar muncul dan menmenghilang ketika proses selesai
+        activeViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
 
-        NotificationViewModel.findRestaurant()
+        activeViewModel.findEvent()
 
-
-// ===========================================
+        // return fragmet yang sudah berisi resicle view utuk di tampilkan di main fragment
         return binding.root
     }
-
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//
-//
-//
-//    }
-
-//    private fun setRestaurantData(restaurant: EventResponse) {
-//        binding.tvTitle.text = restaurant.message
-//    }
 
     private fun setReviewData(events: List<ListEventsItem>) {
         val adapter = Adapter()

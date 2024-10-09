@@ -1,22 +1,20 @@
-package com.example.coba1submission.ui.dashboard
+package com.example.coba1submission.ui.finished
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.coba1submission.data.response.EventResponse
 import com.example.coba1submission.data.response.ListEventsItem
 import com.example.coba1submission.data.retrofit.ApiConfig
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DashboardViewModel : ViewModel() {
+class FinishedViewModel : ViewModel() {
 
-    private val _restaurant = MutableLiveData<EventResponse>()
-    val restaurant: LiveData<EventResponse> = _restaurant
+    private val _eventResponse = MutableLiveData<EventResponse>()
+    val eventResponse: LiveData<EventResponse> = _eventResponse
 
     private val _listEvents = MutableLiveData<List<ListEventsItem>>()
     val listEvents: LiveData<List<ListEventsItem>> = _listEvents
@@ -25,8 +23,8 @@ class DashboardViewModel : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
 
     companion object {
-        private const val TAG = "DashboardViewModel"
-        private const val ACTIVE = "1"
+        private const val TAG = "FinishedViewModel"
+        private const val ACTIVE = "0"
     }
 
     fun findRestaurant() {
@@ -40,7 +38,7 @@ class DashboardViewModel : ViewModel() {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        _restaurant.value = it
+                        _eventResponse.value = it
                         _listEvents.value = it.listEvents
                     }
                 } else {

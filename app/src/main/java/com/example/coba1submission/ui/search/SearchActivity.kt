@@ -27,17 +27,6 @@ class SearchActivity : AppCompatActivity() {
         val itemDecoration = DividerItemDecoration(this@SearchActivity, layoutManager.orientation)
         binding.recyclerView.addItemDecoration(itemDecoration)
 
-
-////        ========================= SEARCH ONCREATE SETTINGS ===================
-//        val searchViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(SearchViewModel::class.java)
-//        searchViewModel.listEvents.observe(this) { events ->
-//            setReviewData(events)
-//        }
-//        searchViewModel.isLoading.observe(this) {
-//            showLoading(it)
-//        }
-
-
         binding.search.clearFocus()
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -45,7 +34,6 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-//                searchList(newText)
                 dispalyed(newText)
 
                 return true
@@ -53,20 +41,6 @@ class SearchActivity : AppCompatActivity() {
         })
 
     }
-
-//    private fun onSearch(){
-//        binding.search.clearFocus()
-//        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(query: String): Boolean {
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String): Boolean {
-//                searchList(newText)
-//                return true
-//            }
-//        })
-//    }
 
     private fun dispalyed(keyword: String){
         if(!binding.search.query.isEmpty()){
@@ -101,45 +75,7 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun searchList(text: String) {
-        val searchViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(SearchViewModel::class.java)
-
-        searchViewModel.isLoading.observe(this) {
-            showLoading(it)
-        }
-        searchViewModel.listEvents.observe(this) { events ->
-            setReviewData(events)
-        }
-    }
-
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
-
-//    private fun searchList(text: String) {
-//        val dataSearchList: MutableList<ListEventsItem> = ArrayList()
-//        for (data in dataList!!) {
-//            if (data.name.lowercase(Locale.getDefault())
-//                    .contains(text.lowercase(Locale.getDefault()))
-//            ) {
-//                dataSearchList.add(data)
-//            }
-//        }
-//        if (dataSearchList.isEmpty()) {
-//            Toast.makeText(this, "Not Found", Toast.LENGTH_SHORT).show()
-//        } else {
-//
-//            binding.search.clearFocus()
-//            binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-//                override fun onQueryTextSubmit(query: String): Boolean {
-//                    return false
-//                }
-//
-//                override fun onQueryTextChange(newText: String): Boolean {
-//                    searchList(newText)
-//                    return true
-//                }
-//            })
-//        }
-//    }
 }
