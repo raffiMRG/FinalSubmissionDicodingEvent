@@ -22,4 +22,9 @@
         android:name="com.example.coba1submission.ui.finished.FinishedFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/navigation_liked"
+        android:name="com.example.coba1submission.ui.liked.LikedFragment"
+        android:label="Favorite"
+        tools:layout="@layout/fragment_liked" />
 </navigation>

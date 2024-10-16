@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.coba1submission.data.response.EventResponse
+import com.example.coba1submission.data.response.EventsResponse
 import com.example.coba1submission.data.response.ListEventsItem
 import com.example.coba1submission.data.retrofit.ApiConfig
 import retrofit2.Call
@@ -13,8 +13,8 @@ import retrofit2.Response
 
 class SearchViewModel : ViewModel() {
 
-    private val _restaurant = MutableLiveData<EventResponse>()
-    val restaurant: LiveData<EventResponse> = _restaurant
+    private val _restaurant = MutableLiveData<EventsResponse>()
+    val restaurant: LiveData<EventsResponse> = _restaurant
 
     private val _listEvents = MutableLiveData<List<ListEventsItem>>()
     val listEvents: LiveData<List<ListEventsItem>> = _listEvents
@@ -42,10 +42,10 @@ class SearchViewModel : ViewModel() {
         _isLoading.value = true
 
         val client = ApiConfig.getApiSearch().getsearchEvents(ACTIVE, keyword)
-        client.enqueue(object : Callback<EventResponse> {
+        client.enqueue(object : Callback<EventsResponse> {
             override fun onResponse(
-                call: Call<EventResponse>,
-                response: Response<EventResponse>
+                call: Call<EventsResponse>,
+                response: Response<EventsResponse>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
@@ -59,7 +59,7 @@ class SearchViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<EventResponse>, t: Throwable) {
+            override fun onFailure(call: Call<EventsResponse>, t: Throwable) {
                 _isLoading.value = false
                 Log.e(TAG, "onFailure: ${t.message}")
             }

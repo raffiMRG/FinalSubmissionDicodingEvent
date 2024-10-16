@@ -14,12 +14,30 @@
     android:padding="16dp"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/image750x500"
-        android:adjustViewBounds="true" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/image750x500"
+            android:adjustViewBounds="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationY="-25dp"
+            android:layout_below="@id/image"
+            app:srcCompat="@drawable/baseline_favorite_border_24"
+            android:contentDescription="@string/app_name"
+            android:layout_marginEnd="16dp"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/title"

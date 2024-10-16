@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.coba1submission.data.response.EventResponse
+import com.example.coba1submission.data.response.EventsResponse
 import com.example.coba1submission.data.response.ListEventsItem
 import com.example.coba1submission.data.retrofit.ApiConfig
 import retrofit2.Call
@@ -13,8 +13,8 @@ import retrofit2.Response
 
 class ActiveHomeViewModel : ViewModel() {
 
-    private val _eventResponse = MutableLiveData<EventResponse>()
-    val eventResponse: LiveData<EventResponse> = _eventResponse
+    private val _eventsResponse = MutableLiveData<EventsResponse>()
+    val eventsResponse: LiveData<EventsResponse> = _eventsResponse
 
     private val _listEvents = MutableLiveData<List<ListEventsItem>>()
     val listEvents: LiveData<List<ListEventsItem>> = _listEvents
@@ -30,15 +30,15 @@ class ActiveHomeViewModel : ViewModel() {
     fun findEvent() {
         _isLoading.value = true
         val client = ApiConfig.getApiService().getActiveEvents(ACTIVE)
-        client.enqueue(object : Callback<EventResponse> {
+        client.enqueue(object : Callback<EventsResponse> {
             override fun onResponse(
-                call: Call<EventResponse>,
-                response: Response<EventResponse>
+                call: Call<EventsResponse>,
+                response: Response<EventsResponse>
             ) {
                 _isLoading.value = false
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        _eventResponse.value = it
+                        _eventsResponse.value = it
                         val limitedList = if (it.listEvents.size > 5) it.listEvents.subList(0, 5) else it.listEvents
                         _listEvents.value = limitedList
                     }
@@ -47,7 +47,7 @@ class ActiveHomeViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<EventResponse>, t: Throwable) {
+            override fun onFailure(call: Call<EventsResponse>, t: Throwable) {
                 _isLoading.value = false
                 Log.e(TAG, "onFailure: ${t.message}")
             }

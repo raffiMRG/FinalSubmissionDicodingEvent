@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+//    alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-android")
+    id("com.google.devtools.ksp")
     id("kotlin-parcelize")
 }
 
@@ -16,6 +18,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -50,6 +53,8 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.activity)
+    implementation(libs.androidx.ui.desktop)
+//    implementation(libs.mediation.test.suite)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -60,4 +65,6 @@ dependencies {
     implementation(libs.logging.interceptor)
 
     implementation(libs.jsoup)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
 }
