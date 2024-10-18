@@ -29,6 +29,8 @@ class FinishedFragment : Fragment() {
         val layoutManager = LinearLayoutManager(requireContext())
 
         binding.rvReview.layoutManager = layoutManager
+
+        // atur agar setiap item yang ada di resicle view memiliki batas garis tipis
         val itemDecoration = DividerItemDecoration(requireContext(), layoutManager.orientation)
         binding.rvReview.addItemDecoration(itemDecoration)
 
