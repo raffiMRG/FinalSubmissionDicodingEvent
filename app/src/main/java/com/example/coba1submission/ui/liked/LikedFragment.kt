@@ -7,16 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.window.application
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.coba1submission.data.helper.ViewModelFactory
 import com.example.coba1submission.data.response.Event
+import com.example.coba1submission.data.database.Event as DbEvent
 import com.example.coba1submission.data.response.ListEventsItem
 import com.example.coba1submission.databinding.FragmentLikedBinding
 import com.example.coba1submission.ui.adapter.Adapter
 import com.example.coba1submission.ui.liked.LikedAdapter
 import com.example.coba1submission.ui.details.DetailsViewModel
+import kotlinx.coroutines.launch
 
 class LikedFragment : Fragment() {
     private var _binding: FragmentLikedBinding? = null
@@ -25,7 +29,8 @@ class LikedFragment : Fragment() {
     private lateinit var likedViewModelVactory: LikedViewModelFactory
     private lateinit var detailsViewModel: DetailsViewModel
     private lateinit var likedAdapter: LikedAdapter
-    private lateinit var ids: MutableList<Int>
+    private val ids: MutableList<Int> = mutableListOf()
+    private val idsLiveData = MutableLiveData<MutableList<Int>>(ids)
 
 
     override fun onCreateView(
@@ -42,31 +47,77 @@ class LikedFragment : Fragment() {
 
 
         // Mengamati LiveData<List<Event>> untuk mendapatkan semua data Event
-        ids = mutableListOf()
         detailsViewModel = obtainViewModel(this)
+
+//        detailsViewModel.getAllData().observe(viewLifecycleOwner) { events ->
+//            // 'events' adalah List<Event> yang diambil dari LiveData
+//            // Menampilkan data atau menggunakannya di UI
+//            ids.clear()
+//            events.forEachIndexed { index, event ->
+//                Log.d("eventId", "index ke: ${index} \n id: ${event.id}: ")
+//                ids.add(event.id)
+//            }
+////            SETUP VIEW MODEL
+//        }
+//
+//        likedViewModel = ViewModelProvider(this, LikedViewModelFactory(ids))[LikedViewModel::class.java]
+//
+////            =========== NYALAKAN KALO G PAKE setReviewData() ================
+//
+//        // Observe the events list from ViewModel
+////            DISINI MASIH KEBACA ADA 2 PADAHAL UDAH DI APUS 1
+//        likedViewModel.eventsResponseList.observe(viewLifecycleOwner) { events ->
+//            events.forEachIndexed { index, event ->
+//                Log.d("EventFromApi", "id: ${event.id} \n desc: ${event.description}")
+//            }
+//            setReviewData(events)
+//        }
+
+        // Menggunakan CoroutineScope untuk mengatur urutan eksekusi
+
+        // Menunggu hingga ids diisi dengan data dari detailsViewModel.getAllData()
         detailsViewModel.getAllData().observe(viewLifecycleOwner) { events ->
-            // 'events' adalah List<Event> yang diambil dari LiveData
-            // Menampilkan data atau menggunakannya di UI
             ids.clear()
             events.forEachIndexed { index, event ->
                 Log.d("eventId", "index ke: ${index} \n id: ${event.id}: ")
                 ids.add(event.id)
             }
-//            SETUP VIEW MODEL
-            likedViewModel = ViewModelProvider(this, LikedViewModelFactory(ids))[LikedViewModel::class.java]
 
-//            =========== NYALAKAN KALO G PAKE setReviewData() ================
-
-            // Observe the events list from ViewModel
-//            DISINI MASIH KEBACA ADA 2 PADAHAL UDAH DI APUS 1
-            likedViewModel.eventsResponseList.observe(viewLifecycleOwner) { events ->
-                events.forEachIndexed { index, event ->
+            // Setelah ids diisi, lanjutkan untuk inisialisasi likedViewModel
+//                likedViewModel = ViewModelProvider(this@LikedFragment, LikedViewModelFactory(ids))[LikedViewModel::class.java]
+            likedViewModel = ViewModelProvider(this@LikedFragment, LikedViewModelFactory(idsLiveData))[LikedViewModel::class.java]
+            likedViewModel.updateIds(ids)
+            // Observe the events list from likedViewModel setelah ViewModel diinisialisasi
+            likedViewModel.eventsResponseList.observe(viewLifecycleOwner) { likedEvents ->
+                likedEvents.forEachIndexed { index, event ->
                     Log.d("EventFromApi", "id: ${event.id} \n desc: ${event.description}")
                 }
-                setReviewData(events)
+                setReviewData(likedEvents)
             }
+
         }
         return binding.root
+    }
+
+    // Fungsi untuk memproses ids secara asinkron
+    private fun processIds(events: List<DbEvent>) {
+        ids.clear()  // Membersihkan daftar IDs
+        events.forEachIndexed { index, event ->
+            Log.d("eventId", "index ke: ${index} \n id: ${event.id}: ")
+            ids.add(event.id)
+        }
+    }
+
+    // Fungsi untuk setup likedViewModel setelah ids selesai diproses
+    private fun setupLikedViewModel() {
+        likedViewModel = ViewModelProvider(this, LikedViewModelFactory(idsLiveData))[LikedViewModel::class.java]
+
+        likedViewModel.eventsResponseList.observe(viewLifecycleOwner) { events ->
+            events.forEachIndexed { index, event ->
+                Log.d("EventFromApi", "id: ${event.id} \n desc: ${event.description}")
+            }
+            setReviewData(events)
+        }
     }
 
     private fun showLoading(isLoading: Boolean) {

@@ -19,7 +19,7 @@ import com.example.coba1submission.ui.details.DetailsViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-class LikedViewModel(private val ids: MutableList<Int>) : ViewModel() {
+class LikedViewModel(private val idsLiveData: MutableLiveData<MutableList<Int>>) : ViewModel() {
 
     private val _eventsResponseList = MutableLiveData<List<Event>>()
     val eventsResponseList: LiveData<List<Event>> = _eventsResponseList
@@ -28,15 +28,23 @@ class LikedViewModel(private val ids: MutableList<Int>) : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
 
     init {
-        fetchEvents()
+        // Mengamati perubahan pada ids
+        idsLiveData.observeForever { newIds ->
+            fetchEvents(newIds)
+        }
     }
 
-    private fun fetchEvents() {
+    // Fungsi untuk memperbarui ids
+    fun updateIds(newIds: List<Int>) {
+        idsLiveData.value = newIds.toMutableList()
+    }
+
+    private fun fetchEvents(newIds: List<Int>) {
         _isLoading.value = true
         val events = mutableListOf<Event>()
-        var remainingCalls = ids.size
+        var remainingCalls = newIds.size
 
-        ids.forEach { id ->
+        newIds.forEach { id ->
             val client = ApiConfig.getApiSearchById().getEventById(id)
             client.enqueue(object : Callback<EventResponse> {
                 override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
