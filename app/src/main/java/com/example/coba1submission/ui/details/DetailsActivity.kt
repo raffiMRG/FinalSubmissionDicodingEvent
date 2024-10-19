@@ -12,6 +12,8 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -22,6 +24,10 @@ import com.example.coba1submission.data.helper.ViewModelFactory
 import com.example.coba1submission.data.response.ListEventsItem
 //import com.example.coba1submission.data.response.Event
 import com.example.coba1submission.databinding.ActivityDetailsBinding
+import com.example.coba1submission.ui.settings.SettingPreferences
+import com.example.coba1submission.ui.settings.SettingsViewModel
+import com.example.coba1submission.ui.settings.SettingsViewModelFactory
+import com.example.coba1submission.ui.settings.dataStore
 import kotlinx.coroutines.launch
 //import com.example.coba1submission.data.helper.ViewModelFactory
 import org.jsoup.Jsoup
@@ -131,15 +137,26 @@ class DetailsActivity : AppCompatActivity() {
                 Log.d("existingItem", "item : ${existingItem}")
                 if (existingItem) {
                     detailsViewModel.delete(item)
-//                    button.text = "Add"
                     binding.fabLike.setImageResource(R.drawable.baseline_favorite_border_24)
                     showToast(getString(R.string.disLiked))
                 } else {
                     detailsViewModel.insert(item)
-//                    button.text = "Delete"
                     binding.fabLike.setImageResource(R.drawable.baseline_favorite_24)
                     showToast(getString(R.string.liked))
                 }
+            }
+        }
+
+        val pref = SettingPreferences.getInstance(application.dataStore)
+        val mainViewModel = ViewModelProvider(this, SettingsViewModelFactory(pref)).get(
+            SettingsViewModel::class.java
+        )
+
+        mainViewModel.getThemeSettings().observe(this) { isDarkModeActive: Boolean ->
+            if (isDarkModeActive) {
+                binding.goToWeb.setTextColor(ContextCompat.getColor(this, R.color.primary_text_night))
+            } else {
+                binding.goToWeb.setTextColor(ContextCompat.getColor(this, R.color.primary_surfice))
             }
         }
     }

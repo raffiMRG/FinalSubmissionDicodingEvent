@@ -26,6 +26,46 @@ class HomeFragment : Fragment() {
         binding.activeRecycleView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
+        model1()
+
+//        activeHomeViewModel = ViewModelProvider(this).get(ActiveHomeViewModel::class.java)
+//
+//        activeHomeViewModel.listEvents.observe(viewLifecycleOwner){ events ->
+//            setActiveReviewData(events)
+//        }
+//
+//        activeHomeViewModel.findEvent()
+
+// =====================================================================
+        binding.finishedRecycleView.layoutManager =
+            LinearLayoutManager(requireContext())
+
+        model2()
+
+//        finishedHomeViewModel = ViewModelProvider(this).get(FinishedHomeViewModel::class.java)
+//
+//        finishedHomeViewModel.listEvents.observe(viewLifecycleOwner){ events ->
+//            setFinishedReviewData(events)
+//        }
+//
+//        finishedHomeViewModel.isLoading.observe(viewLifecycleOwner){
+//            showLoading(it)
+//        }
+//
+//        finishedHomeViewModel.findEvent()
+
+
+//        REFRESH FITUR
+//        binding.containerFragment.setOnRefreshListener {
+//            reloadData()  // Memuat ulang data saat swipe to refresh diaktifkan
+//            swipeRefreshLayout.isRefreshing = false  // Berhenti memutar indikator refresh
+//        }
+
+        val root: View = binding.root
+        return root
+    }
+
+    private fun model1(){
         activeHomeViewModel = ViewModelProvider(this).get(ActiveHomeViewModel::class.java)
 
         activeHomeViewModel.listEvents.observe(viewLifecycleOwner){ events ->
@@ -33,10 +73,9 @@ class HomeFragment : Fragment() {
         }
 
         activeHomeViewModel.findEvent()
+    }
 
-// =====================================================================
-        binding.finishedRecycleView.layoutManager =
-            LinearLayoutManager(requireContext())
+    private fun model2(){
         finishedHomeViewModel = ViewModelProvider(this).get(FinishedHomeViewModel::class.java)
 
         finishedHomeViewModel.listEvents.observe(viewLifecycleOwner){ events ->
@@ -48,10 +87,6 @@ class HomeFragment : Fragment() {
         }
 
         finishedHomeViewModel.findEvent()
-
-
-        val root: View = binding.root
-        return root
     }
 
     private fun setActiveReviewData(events: List<ListEventsItem>) {
