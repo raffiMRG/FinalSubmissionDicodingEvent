@@ -45,79 +45,39 @@ class LikedFragment : Fragment() {
         val itemDecoration = DividerItemDecoration(requireContext(), layoutManager.orientation)
         binding.rvReview.addItemDecoration(itemDecoration)
 
-
-        // Mengamati LiveData<List<Event>> untuk mendapatkan semua data Event
         detailsViewModel = obtainViewModel(this)
-
-//        detailsViewModel.getAllData().observe(viewLifecycleOwner) { events ->
-//            // 'events' adalah List<Event> yang diambil dari LiveData
-//            // Menampilkan data atau menggunakannya di UI
-//            ids.clear()
-//            events.forEachIndexed { index, event ->
-//                Log.d("eventId", "index ke: ${index} \n id: ${event.id}: ")
-//                ids.add(event.id)
-//            }
-////            SETUP VIEW MODEL
-//        }
-//
-//        likedViewModel = ViewModelProvider(this, LikedViewModelFactory(ids))[LikedViewModel::class.java]
-//
-////            =========== NYALAKAN KALO G PAKE setReviewData() ================
-//
-//        // Observe the events list from ViewModel
-////            DISINI MASIH KEBACA ADA 2 PADAHAL UDAH DI APUS 1
-//        likedViewModel.eventsResponseList.observe(viewLifecycleOwner) { events ->
-//            events.forEachIndexed { index, event ->
-//                Log.d("EventFromApi", "id: ${event.id} \n desc: ${event.description}")
-//            }
-//            setReviewData(events)
-//        }
-
-        // Menggunakan CoroutineScope untuk mengatur urutan eksekusi
-
-        // Menunggu hingga ids diisi dengan data dari detailsViewModel.getAllData()
         detailsViewModel.getAllData().observe(viewLifecycleOwner) { events ->
-            ids.clear()
-            events.forEachIndexed { index, event ->
-                Log.d("eventId", "index ke: ${index} \n id: ${event.id}: ")
-                ids.add(event.id)
-            }
-
-            // Setelah ids diisi, lanjutkan untuk inisialisasi likedViewModel
-//                likedViewModel = ViewModelProvider(this@LikedFragment, LikedViewModelFactory(ids))[LikedViewModel::class.java]
-            likedViewModel = ViewModelProvider(this@LikedFragment, LikedViewModelFactory(idsLiveData))[LikedViewModel::class.java]
-            likedViewModel.updateIds(ids)
-            // Observe the events list from likedViewModel setelah ViewModel diinisialisasi
-            likedViewModel.eventsResponseList.observe(viewLifecycleOwner) { likedEvents ->
-                likedEvents.forEachIndexed { index, event ->
-                    Log.d("EventFromApi", "id: ${event.id} \n desc: ${event.description}")
+            if (events.isNullOrEmpty()) {
+                Log.d("IdsNull", "IDS  Is Null")
+                binding.likedStatus.visibility = View.VISIBLE
+                binding.rvReview.visibility = View.INVISIBLE
+                binding.likedStatus.text = "No Data Found..."
+            }else {
+                ids.clear()
+                events.forEachIndexed { index, event ->
+                    Log.d("eventId", "index ke: ${index} \n id: ${event.id}: ")
+                    ids.add(event.id)
                 }
-                setReviewData(likedEvents)
+
+                likedViewModel = ViewModelProvider(
+                    this@LikedFragment,
+                    LikedViewModelFactory(idsLiveData)
+                )[LikedViewModel::class.java]
+                likedViewModel.updateIds(ids)
+                // Observe the events list from likedViewModel setelah ViewModel diinisialisasi
+                likedViewModel.eventsResponseList.observe(viewLifecycleOwner) { likedEvents ->
+                    likedEvents.forEachIndexed { index, event ->
+                        Log.d("EventFromApi", "id: ${event.id} \n desc: ${event.description}")
+                    }
+                    setReviewData(likedEvents)
+                }
+                likedViewModel.isLoading.observe(viewLifecycleOwner) {
+                    showLoading(it)
+                }
             }
 
         }
         return binding.root
-    }
-
-    // Fungsi untuk memproses ids secara asinkron
-    private fun processIds(events: List<DbEvent>) {
-        ids.clear()  // Membersihkan daftar IDs
-        events.forEachIndexed { index, event ->
-            Log.d("eventId", "index ke: ${index} \n id: ${event.id}: ")
-            ids.add(event.id)
-        }
-    }
-
-    // Fungsi untuk setup likedViewModel setelah ids selesai diproses
-    private fun setupLikedViewModel() {
-        likedViewModel = ViewModelProvider(this, LikedViewModelFactory(idsLiveData))[LikedViewModel::class.java]
-
-        likedViewModel.eventsResponseList.observe(viewLifecycleOwner) { events ->
-            events.forEachIndexed { index, event ->
-                Log.d("EventFromApi", "id: ${event.id} \n desc: ${event.description}")
-            }
-            setReviewData(events)
-        }
     }
 
     private fun showLoading(isLoading: Boolean) {
