@@ -1,6 +1,5 @@
 package com.example.coba1submission.ui.details
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -9,10 +8,7 @@ import android.os.Parcelable
 import android.text.Html
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -22,22 +18,18 @@ import com.example.coba1submission.data.database.Event as DbEvent
 import com.example.coba1submission.data.response.Event
 import com.example.coba1submission.data.helper.ViewModelFactory
 import com.example.coba1submission.data.response.ListEventsItem
-//import com.example.coba1submission.data.response.Event
 import com.example.coba1submission.databinding.ActivityDetailsBinding
 import com.example.coba1submission.ui.settings.SettingPreferences
 import com.example.coba1submission.ui.settings.SettingsViewModel
 import com.example.coba1submission.ui.settings.SettingsViewModelFactory
 import com.example.coba1submission.ui.settings.dataStore
 import kotlinx.coroutines.launch
-//import com.example.coba1submission.data.helper.ViewModelFactory
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import kotlin.properties.Delegates
 
 class DetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailsBinding
-    private var isFavorite = false
-    private var event: DbEvent? = null
     private lateinit var detailsViewModel: DetailsViewModel
     private lateinit var description: String
     private lateinit var name: String
@@ -50,11 +42,6 @@ class DetailsActivity : AppCompatActivity() {
     private var quota by Delegates.notNull<Int>()
     private var id by Delegates.notNull<Int>()
 
-    companion object{
-        const val ALERT_DIALOG_CLOSE = 10
-    }
-
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         title = "Details"
         super.onCreate(savedInstanceState)
@@ -63,9 +50,9 @@ class DetailsActivity : AppCompatActivity() {
 
         detailsViewModel = obtainViewModel(this@DetailsActivity)
 
-        var tryIntent = intent.getParcelableExtra<Parcelable>("key_hero")
+        val tryIntent = intent.getParcelableExtra<Parcelable>("key_hero")
         if(tryIntent is ListEventsItem){
-            var dataEvent = getIntentValue()
+            val dataEvent = getIntentValue()
             description = dataEvent?.description ?: "Description"
             name = dataEvent?.name ?: "Name"
             ownerName = dataEvent?.ownerName ?: "Owner Name"
@@ -77,7 +64,7 @@ class DetailsActivity : AppCompatActivity() {
             quota = dataEvent?.quota ?: 0
             id = dataEvent?.id ?: 0
         }else{
-            var dataEvent = getIntentValueNew()
+            val dataEvent = getIntentValueNew()
             description = dataEvent?.description ?: "description"
             name = dataEvent?.name ?: "Name"
             ownerName = dataEvent?.ownerName ?: "Owner Name"
@@ -90,17 +77,14 @@ class DetailsActivity : AppCompatActivity() {
             id = dataEvent?.id ?: 0
         }
 
-        var document: Document = Jsoup.parse(description)
+        val document: Document = Jsoup.parse(description)
         document.select("img").remove() // Menghapus semua tag <img>
         val descriptionWithoutImages = document.html()
 
-        var description = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        val description =
             Html.fromHtml(descriptionWithoutImages, Html.FROM_HTML_MODE_LEGACY)
-        } else {
-            Html.fromHtml(descriptionWithoutImages)
-        }
         Glide.with(binding.root)
-            .load("${mediaCover}")
+            .load(mediaCover)
             .into(binding.image)
 
         val sisaQuota = registrants.let {
@@ -110,9 +94,9 @@ class DetailsActivity : AppCompatActivity() {
         }
         binding.title.text = name
         binding.subTitle.text = ownerName
-        binding.quota.text = "Sisa Quota : ${sisaQuota}"
-        binding.startTime.text = "Mulai : ${beginTime}"
-        binding.endTime.text = "Selesai : ${endTime}"
+        binding.quota.text = StringBuilder("Sisa Quota : ").append(sisaQuota)
+        binding.startTime.text = StringBuilder("Mulai : ").append(beginTime)
+        binding.endTime.text = StringBuilder("Selesai : ").append(endTime)
         binding.text.text = description
 
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
@@ -120,21 +104,19 @@ class DetailsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-//            val id = dataEvent?.id
-//            val title = dataEvent?.name
-        val id = id ?: 0
-        val title = name ?: "Title is empty yo!!!"
+        val id = id
+        val title = name
         val existingItem = detailsViewModel.getItemById(id)
         if (existingItem){
             binding.fabLike.setImageResource(R.drawable.baseline_favorite_24)
         }
 
         binding.fabLike.setOnClickListener {
-            Log.d("titleIsertDb", "title: ${title} \n id ${id}")
+            Log.d("titleIsertDb", "title: $title \n id $id")
             lifecycleScope.launch {
                 val item = DbEvent(id, title)
 
-                Log.d("existingItem", "item : ${existingItem}")
+                Log.d("existingItem", "item : $existingItem")
                 if (existingItem) {
                     detailsViewModel.delete(item)
                     binding.fabLike.setImageResource(R.drawable.baseline_favorite_border_24)
@@ -148,9 +130,7 @@ class DetailsActivity : AppCompatActivity() {
         }
 
         val pref = SettingPreferences.getInstance(application.dataStore)
-        val mainViewModel = ViewModelProvider(this, SettingsViewModelFactory(pref)).get(
-            SettingsViewModel::class.java
-        )
+        val mainViewModel = ViewModelProvider(this, SettingsViewModelFactory(pref))[SettingsViewModel::class.java]
 
         mainViewModel.getThemeSettings().observe(this) { isDarkModeActive: Boolean ->
             if (isDarkModeActive) {
@@ -162,7 +142,7 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun getIntentValue(): ListEventsItem?{
-        var data = if (Build.VERSION.SDK_INT >= 33) {
+        val data = if (Build.VERSION.SDK_INT >= 33) {
             //            intent.getParcelableExtra<ListEventsItem>("key_hero", ListEventsItem::class.java)
             intent.getParcelableExtra("key_hero", ListEventsItem::class.java)
         } else {
@@ -174,7 +154,7 @@ class DetailsActivity : AppCompatActivity() {
     }
 
     private fun getIntentValueNew(): Event?{
-        var data = if (Build.VERSION.SDK_INT >= 33) {
+        val data = if (Build.VERSION.SDK_INT >= 33) {
             //            intent.getParcelableExtra<ListEventsItem>("key_hero", ListEventsItem::class.java)
             intent.getParcelableExtra("key_hero", Event::class.java)
         } else {
@@ -189,37 +169,8 @@ class DetailsActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun showAlertDialog(type: Int) {
-        val isDialogClose = type == ALERT_DIALOG_CLOSE
-        val dialogTitle: String
-        val dialogMessage: String
-        if (isDialogClose) {
-            dialogTitle = getString(R.string.cancel)
-            dialogMessage = getString(R.string.message_cancel)
-        } else {
-            dialogMessage = getString(R.string.message_delete)
-            dialogTitle = getString(R.string.delete)
-        }
-        val alertDialogBuilder = AlertDialog.Builder(this)
-        with(alertDialogBuilder) {
-            setTitle(dialogTitle)
-            setMessage(dialogMessage)
-            setCancelable(false)
-            setPositiveButton(getString(R.string.yes)) { _, _ ->
-                if (!isDialogClose) {
-                    detailsViewModel.delete(event as DbEvent)
-                    showToast(getString(R.string.deleted))
-                }
-                finish()
-            }
-            setNegativeButton(getString(R.string.no)) { dialog, _ -> dialog.cancel() }
-        }
-        val alertDialog = alertDialogBuilder.create()
-        alertDialog.show()
-    }
-
     private fun obtainViewModel(activity: AppCompatActivity): DetailsViewModel {
         val factory = ViewModelFactory.getInstance(activity.application)
-        return ViewModelProvider(activity, factory).get(DetailsViewModel::class.java)
+        return ViewModelProvider(activity, factory)[DetailsViewModel::class.java]
     }
 }

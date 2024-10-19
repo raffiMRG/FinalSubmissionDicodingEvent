@@ -23,9 +23,9 @@ class Adapter : ListAdapter<ListEventsItem, Adapter.MyViewHolder>(DIFF_CALLBACK)
 
     class MyViewHolder(val binding: ItemRowBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(review: ListEventsItem){
-            binding.eventTitle.text = "${review.name}"
+            binding.eventTitle.text = review.name
             Glide.with(binding.root)
-                .load("${review.mediaCover}")
+                .load(review.mediaCover)
                 .into(binding.recImage)
             this.itemView.setOnClickListener{
                 val intentDetail = Intent(this.itemView.context, DetailsActivity::class.java)

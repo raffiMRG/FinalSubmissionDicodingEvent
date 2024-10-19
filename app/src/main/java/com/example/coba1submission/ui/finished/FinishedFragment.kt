@@ -16,13 +16,13 @@ class FinishedFragment : Fragment() {
 
     private var _binding: FragmentNotificationsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var NotificationViewModel: FinishedViewModel
+    private lateinit var notificationViewModel: FinishedViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        NotificationViewModel = ViewModelProvider(this).get(FinishedViewModel::class.java)
+        notificationViewModel = ViewModelProvider(this)[FinishedViewModel::class.java]
 
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
 
@@ -34,15 +34,15 @@ class FinishedFragment : Fragment() {
         val itemDecoration = DividerItemDecoration(requireContext(), layoutManager.orientation)
         binding.rvReview.addItemDecoration(itemDecoration)
 
-        NotificationViewModel.listEvents.observe(viewLifecycleOwner) { events ->
+        notificationViewModel.listEvents.observe(viewLifecycleOwner) { events ->
             setReviewData(events)
         }
 
-        NotificationViewModel.isLoading.observe(viewLifecycleOwner) {
+        notificationViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
 
-        NotificationViewModel.findRestaurant()
+        notificationViewModel.findRestaurant()
 
         return binding.root
     }

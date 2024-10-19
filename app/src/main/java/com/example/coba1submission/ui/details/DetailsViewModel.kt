@@ -14,10 +14,6 @@ class DetailsViewModel(application: Application) : ViewModel() {
         mNoteRepository.insert(event)
     }
 
-    fun update(event: Event) {
-        mNoteRepository.update(event)
-    }
-
     fun delete(event: Event) {
         mNoteRepository.delete(event)
     }

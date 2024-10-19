@@ -23,9 +23,9 @@ class ActiveHomeAdapter : ListAdapter<ListEventsItem, ActiveHomeAdapter.MyViewHo
 
     class MyViewHolder(val binding: ActiveHomeItemRowBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(review: ListEventsItem){
-            binding.eventTitle.text = "${review.name}"
+            binding.eventTitle.text = review.name
             Glide.with(binding.root)
-                .load("${review.imageLogo}")
+                .load(review.imageLogo)
                 .into(binding.recImage)
             this.itemView.setOnClickListener{
                 val intentDetail = Intent(this.itemView.context, DetailsActivity::class.java)

@@ -14,13 +14,19 @@ import retrofit2.Response
 class ActiveHomeViewModel : ViewModel() {
 
     private val _eventsResponse = MutableLiveData<EventsResponse>()
-    val eventsResponse: LiveData<EventsResponse> = _eventsResponse
 
     private val _listEvents = MutableLiveData<List<ListEventsItem>>()
     val listEvents: LiveData<List<ListEventsItem>> = _listEvents
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _isFailure = MutableLiveData<Boolean>()
+    val isFailure: LiveData<Boolean> = _isFailure
+
+    private val _responseMessage = MutableLiveData<String>()
+    val responseMessage: LiveData<String> = _responseMessage
+
 
     companion object {
         private const val TAG = "ActiveHomeViewModel"
@@ -36,6 +42,7 @@ class ActiveHomeViewModel : ViewModel() {
                 response: Response<EventsResponse>
             ) {
                 _isLoading.value = false
+                _isFailure.value = false
                 if (response.isSuccessful) {
                     response.body()?.let {
                         _eventsResponse.value = it
@@ -49,7 +56,9 @@ class ActiveHomeViewModel : ViewModel() {
 
             override fun onFailure(call: Call<EventsResponse>, t: Throwable) {
                 _isLoading.value = false
-                Log.e(TAG, "onFailure: ${t.message}")
+                _isFailure.value = true
+                _responseMessage.value = "Gagal Memuat Halaman, Silahkan Periksa koneksi anda\n\n Failure: ${t.message}"
+//                Log.d("messageLangsung", "onFailure: ${t.message}")
             }
         })
     }

@@ -1,64 +1,52 @@
-<LinearLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="250dp"
+    android:id="@+id/recCard"
+    app:cardElevation="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardUseCompatPadding="true">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="200dp"
-        android:layout_height="250dp"
-        android:id="@+id/recCard"
-        app:cardElevation="8dp"
-        app:cardCornerRadius="16dp"
-        app:cardUseCompatPadding="true">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="5.5">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:id="@+id/recImage"
+            android:layout_weight="4"
+            android:contentDescription="@string/image_logo"
+            android:scaleType="fitCenter"
+            android:src="@drawable/image750x500"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="5.5">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:id="@+id/recImage"
-                android:layout_weight="4"
-                android:scaleType="centerCrop"
-                android:src="@drawable/image750x500"/>
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:baselineAligned="false"
+            android:weightSum="2"
+            android:layout_weight="1.5">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:weightSum="2"
-                android:layout_weight="1.5">
+                android:layout_height="match_parent"
+                android:layout_weight="1.3"
+                android:padding="10dp"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1.3"
-                    android:padding="10dp"
-                    android:orientation="vertical">
+                    android:text="Title"
+                    android:textSize="16sp"
+                    android:maxLines="2"
+                    android:textColor="@color/lavender"
+                    android:id="@+id/event_title"/>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Title"
-                        android:textSize="16sp"
-                        android:maxLines="2"
-                        android:textColor="@color/lavender"
-                        android:id="@+id/event_title"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Desc"
-                        android:textSize="18sp"
-                        android:id="@+id/recDesc"
-                        android:maxLines="0"/>
-
-                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
