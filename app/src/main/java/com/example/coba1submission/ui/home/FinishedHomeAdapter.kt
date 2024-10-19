@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.coba1submission.data.response.ListEventsItem
-import com.example.coba1submission.databinding.ActiveHomeItemRowBinding
 import com.example.coba1submission.databinding.ItemRowBinding
 import com.example.coba1submission.ui.details.DetailsActivity
 
@@ -24,9 +23,9 @@ class FinishedHomeAdapter : ListAdapter<ListEventsItem, FinishedHomeAdapter.MyVi
 
     class MyViewHolder(val binding: ItemRowBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(review: ListEventsItem){
-            binding.eventTitle.text = "${review.name}"
+            binding.eventTitle.text = review.name
             Glide.with(binding.root)
-                .load("${review.imageLogo}")
+                .load(review.imageLogo)
                 .into(binding.recImage)
             this.itemView.setOnClickListener{
                 val intentDetail = Intent(this.itemView.context, DetailsActivity::class.java)

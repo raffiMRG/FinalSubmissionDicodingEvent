@@ -2,13 +2,9 @@ package com.example.coba1submission.ui.settings
 
 import android.os.Bundle
 import android.widget.CompoundButton
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
-import com.example.coba1submission.R
 import com.example.coba1submission.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
@@ -23,9 +19,7 @@ class SettingsActivity : AppCompatActivity() {
         val switchTheme = binding.switchTheme
 
         val pref = SettingPreferences.getInstance(application.dataStore)
-        val mainViewModel = ViewModelProvider(this, SettingsViewModelFactory(pref)).get(
-            SettingsViewModel::class.java
-        )
+        val mainViewModel = ViewModelProvider(this, SettingsViewModelFactory(pref))[SettingsViewModel::class.java]
 
         mainViewModel.getThemeSettings().observe(this) { isDarkModeActive: Boolean ->
             if (isDarkModeActive) {

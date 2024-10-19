@@ -17,7 +17,7 @@
     <string name="text_5">This is a Fragment Example</string>
     <string name="ini_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</string>
     <string name="register">Register</string>
-    <string name="insert_event">Masukan event yang ingin dicari...</string>
+    <string name="insert_event">Masukan event yang ingin dicari…</string>
     <string name="upcoming">Upcoming</string>
     <string name="finished">Finished</string>
 
@@ -31,4 +31,10 @@
     <string name="deleted">Satu item berhasil dihapus</string>
     <string name="no">Tidak</string>
     <string name="dark_mode">Dark Mode</string>
+
+    <string name="masukan_string">Masukan event yang ingin dicari…</string>
+    <string name="event_notfound">Event tidak Ditemukan.</string>
+    <string name="image_logo">image logo</string>
+    <string name="title">Title</string>
+    <string name="desc">Desc</string>
 </resources>

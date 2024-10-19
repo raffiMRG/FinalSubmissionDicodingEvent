@@ -7,13 +7,13 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.coba1submission.R
 import com.example.coba1submission.data.response.ListEventsItem
 import com.example.coba1submission.databinding.ActivitySearchBinding
 import com.example.coba1submission.ui.adapter.Adapter
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
-    private lateinit var dataList: MutableList<ListEventsItem>
     override fun onCreate(savedInstanceState: Bundle?) {
         title = "Search"
         super.onCreate(savedInstanceState)
@@ -23,9 +23,11 @@ class SearchActivity : AppCompatActivity() {
 
 
         val layoutManager = LinearLayoutManager(this@SearchActivity)
-        binding.recyclerView.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(this@SearchActivity, layoutManager.orientation)
-        binding.recyclerView.addItemDecoration(itemDecoration)
+        binding.apply {
+            recyclerView.layoutManager = layoutManager
+            recyclerView.addItemDecoration(itemDecoration)
+        }
 
         binding.search.clearFocus()
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -43,10 +45,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun dispalyed(keyword: String){
-        if(!binding.search.query.isEmpty()){
+        if(binding.search.query.isNotEmpty()){
             binding.test.visibility = View.INVISIBLE
             binding.recyclerView.visibility = View.VISIBLE
-            val searchViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(SearchViewModel::class.java)
+            val searchViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[SearchViewModel::class.java]
             searchViewModel.setQuery(keyword)
             searchViewModel.listEvents.observe(this) { events ->
                 setReviewData(events)
@@ -55,7 +57,7 @@ class SearchActivity : AppCompatActivity() {
                 showLoading(it)
             }
         }else{
-            binding.test.text = "Masukan event yang ingin dicari..."
+            binding.test.text = getText(R.string.masukan_string)
             binding.test.visibility = View.VISIBLE
             binding.recyclerView.visibility = View.INVISIBLE
         }
@@ -63,7 +65,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun setReviewData(events: List<ListEventsItem>) {
         if (events.isEmpty()){
-            binding.test.text = "Event tidak Ditemukan."
+            binding.test.text = getText(R.string.event_notfound)
             binding.test.visibility = View.VISIBLE
             binding.recyclerView.visibility = View.INVISIBLE
         }else {

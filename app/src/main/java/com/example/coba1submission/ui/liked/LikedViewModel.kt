@@ -1,21 +1,12 @@
 package com.example.coba1submission.ui.liked
 
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.coba1submission.data.response.Event
-import com.example.coba1submission.data.database.Event as dbEvent
 import com.example.coba1submission.data.response.EventResponse
-import com.example.coba1submission.data.response.EventsResponse
-import com.example.coba1submission.data.response.ListEventsItem
 import com.example.coba1submission.data.retrofit.ApiConfig
-import com.example.coba1submission.databinding.ItemRowBinding
-import com.example.coba1submission.ui.details.DetailsViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,13 +19,11 @@ class LikedViewModel(private val idsLiveData: MutableLiveData<MutableList<Int>>)
     val isLoading: LiveData<Boolean> = _isLoading
 
     init {
-        // Mengamati perubahan pada ids
         idsLiveData.observeForever { newIds ->
             fetchEvents(newIds)
         }
     }
 
-    // Fungsi untuk memperbarui ids
     fun updateIds(newIds: List<Int>) {
         idsLiveData.value = newIds.toMutableList()
     }
@@ -45,7 +34,7 @@ class LikedViewModel(private val idsLiveData: MutableLiveData<MutableList<Int>>)
         var remainingCalls = newIds.size
 
         newIds.forEach { id ->
-            val client = ApiConfig.getApiSearchById().getEventById(id)
+            val client = ApiConfig.getApiService().getEventById(id)
             client.enqueue(object : Callback<EventResponse> {
                 override fun onResponse(call: Call<EventResponse>, response: Response<EventResponse>) {
                     if (response.isSuccessful) {

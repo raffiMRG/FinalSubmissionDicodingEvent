@@ -1,5 +1,6 @@
 package com.example.coba1submission.ui.active
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,31 +22,38 @@ class ActiveFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // instansiasi model untuk fragment
-        activeViewModel = ViewModelProvider(this).get(ActiveViewModel::class.java)
+        activeViewModel = ViewModelProvider(this)[ActiveViewModel::class.java]
 
-        // binding untuk fragment
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
-        // buat layout manager untuk resicle view dengan model Linear (simple standar)
         val layoutManager = LinearLayoutManager(requireContext())
         binding.rvReview.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(requireContext(), layoutManager.orientation)
         binding.rvReview.addItemDecoration(itemDecoration)
 
-        // atur list event yang akan di masukan kedalam adapter
+        activeViewModel.isFailure.observe(viewLifecycleOwner){
+            Log.d("failedCondition", "$it")
+            if(it){
+                Log.d("failedCondition", "sudah masuk ke failed condition")
+                binding.messageStatus.visibility = View.VISIBLE
+                binding.rvReview.visibility = View.INVISIBLE
+                activeViewModel.responseMessage.observe(viewLifecycleOwner){message ->
+                    binding.messageStatus.text = message
+                    Log.d("messageStatus", message)
+                }
+            }
+        }
+
         activeViewModel.listEvents.observe(viewLifecycleOwner) { events ->
             setReviewData(events)
         }
 
-        // atur progres bar (loading) agar muncul dan menmenghilang ketika proses selesai
         activeViewModel.isLoading.observe(viewLifecycleOwner) {
             showLoading(it)
         }
 
         activeViewModel.findEvent()
 
-        // return fragmet yang sudah berisi resicle view utuk di tampilkan di main fragment
         return binding.root
     }
 

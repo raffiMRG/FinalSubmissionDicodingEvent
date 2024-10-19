@@ -34,6 +34,6 @@ class EventRepository(application: Application) {
     fun isEventExists(id: Int): Boolean {
         return executorService.submit(Callable {
             mNotesDao.isEventExists(id)
-        }).get() // Menggunakan get() untuk mendapatkan hasil Boolean dari Future
+        }).get()
     }
 }

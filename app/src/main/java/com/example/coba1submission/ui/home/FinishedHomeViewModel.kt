@@ -14,7 +14,6 @@ import retrofit2.Response
 class FinishedHomeViewModel : ViewModel() {
 
     private val _eventsResponse = MutableLiveData<EventsResponse>()
-    val eventsResponse: LiveData<EventsResponse> = _eventsResponse
 
     private val _listEvents = MutableLiveData<List<ListEventsItem>>()
     val listEvents: LiveData<List<ListEventsItem>> = _listEvents
@@ -42,8 +41,6 @@ class FinishedHomeViewModel : ViewModel() {
                         val limitedList = if (it.listEvents.size > 5) it.listEvents.subList(0, 5) else it.listEvents
                         _listEvents.value = limitedList
                     }
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
                 }
             }
 

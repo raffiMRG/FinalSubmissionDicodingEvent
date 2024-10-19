@@ -1,6 +1,5 @@
 package com.example.coba1submission.ui.search
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,7 +13,6 @@ import retrofit2.Response
 class SearchViewModel : ViewModel() {
 
     private val _restaurant = MutableLiveData<EventsResponse>()
-    val restaurant: LiveData<EventsResponse> = _restaurant
 
     private val _listEvents = MutableLiveData<List<ListEventsItem>>()
     val listEvents: LiveData<List<ListEventsItem>> = _listEvents
@@ -23,10 +21,8 @@ class SearchViewModel : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
 
     private var _query = MutableLiveData<String>()
-    var query: LiveData<String> = _query
 
     companion object {
-        private const val TAG = "SearchViewModel"
         private const val ACTIVE = "-1"
     }
 
@@ -38,10 +34,10 @@ class SearchViewModel : ViewModel() {
         _query.value = newQuery
     }
 
-    fun findEvent(keyword: String) {
+    private fun findEvent(keyword: String) {
         _isLoading.value = true
 
-        val client = ApiConfig.getApiSearch().getsearchEvents(ACTIVE, keyword)
+        val client = ApiConfig.getApiService().getsearchEvents(ACTIVE, keyword)
         client.enqueue(object : Callback<EventsResponse> {
             override fun onResponse(
                 call: Call<EventsResponse>,
@@ -53,15 +49,11 @@ class SearchViewModel : ViewModel() {
                         _restaurant.value = it
                         _listEvents.value = it.listEvents
                     }
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
-
                 }
             }
 
             override fun onFailure(call: Call<EventsResponse>, t: Throwable) {
                 _isLoading.value = false
-                Log.e(TAG, "onFailure: ${t.message}")
             }
         })
     }

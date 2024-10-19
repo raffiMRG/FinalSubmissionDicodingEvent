@@ -1,6 +1,7 @@
 package com.example.coba1submission.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,15 +27,8 @@ class HomeFragment : Fragment() {
         binding.activeRecycleView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        model1()
 
-//        activeHomeViewModel = ViewModelProvider(this).get(ActiveHomeViewModel::class.java)
-//
-//        activeHomeViewModel.listEvents.observe(viewLifecycleOwner){ events ->
-//            setActiveReviewData(events)
-//        }
-//
-//        activeHomeViewModel.findEvent()
+        model1()
 
 // =====================================================================
         binding.finishedRecycleView.layoutManager =
@@ -68,8 +62,14 @@ class HomeFragment : Fragment() {
     private fun model1(){
         activeHomeViewModel = ViewModelProvider(this).get(ActiveHomeViewModel::class.java)
 
+        checkModel()
+
         activeHomeViewModel.listEvents.observe(viewLifecycleOwner){ events ->
             setActiveReviewData(events)
+        }
+
+        activeHomeViewModel.isLoading.observe(viewLifecycleOwner){
+            showLoading(it)
         }
 
         activeHomeViewModel.findEvent()
@@ -87,6 +87,22 @@ class HomeFragment : Fragment() {
         }
 
         finishedHomeViewModel.findEvent()
+    }
+
+    private fun checkModel(){
+        activeHomeViewModel.isFailure.observe(viewLifecycleOwner){
+            Log.d("failedCondition", "${it}")
+            if(it){
+                Log.d("failedCondition", "sudah masuk ke failed condition")
+                binding.messageStatus.visibility = View.VISIBLE
+                binding.slideShow.visibility = View.INVISIBLE
+                activeHomeViewModel.responseMessage.observe(viewLifecycleOwner){message ->
+//                    val betaMessage = "gagal..."
+                    binding.messageStatus.text = message
+                    Log.d("messageStatus", message)
+                }
+            }
+        }
     }
 
     private fun setActiveReviewData(events: List<ListEventsItem>) {

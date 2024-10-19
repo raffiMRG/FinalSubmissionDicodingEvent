@@ -14,7 +14,6 @@ import retrofit2.Response
 class FinishedViewModel : ViewModel() {
 
     private val _eventsResponse = MutableLiveData<EventsResponse>()
-    val eventsResponse: LiveData<EventsResponse> = _eventsResponse
 
     private val _listEvents = MutableLiveData<List<ListEventsItem>>()
     val listEvents: LiveData<List<ListEventsItem>> = _listEvents
@@ -41,8 +40,6 @@ class FinishedViewModel : ViewModel() {
                         _eventsResponse.value = it
                         _listEvents.value = it.listEvents
                     }
-                } else {
-                    Log.e(TAG, "onFailure: ${response.message()}")
                 }
             }
 

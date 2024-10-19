@@ -1,36 +1,27 @@
 package com.example.coba1submission.ui.liked
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.ui.window.application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.coba1submission.R
 import com.example.coba1submission.data.helper.ViewModelFactory
 import com.example.coba1submission.data.response.Event
-import com.example.coba1submission.data.database.Event as DbEvent
-import com.example.coba1submission.data.response.ListEventsItem
 import com.example.coba1submission.databinding.FragmentLikedBinding
-import com.example.coba1submission.ui.adapter.Adapter
-import com.example.coba1submission.ui.liked.LikedAdapter
 import com.example.coba1submission.ui.details.DetailsViewModel
-import kotlinx.coroutines.launch
 
 class LikedFragment : Fragment() {
     private var _binding: FragmentLikedBinding? = null
     private val binding get() = _binding!!
     private lateinit var likedViewModel: LikedViewModel
-    private lateinit var likedViewModelVactory: LikedViewModelFactory
     private lateinit var detailsViewModel: DetailsViewModel
-    private lateinit var likedAdapter: LikedAdapter
     private val ids: MutableList<Int> = mutableListOf()
-    private val idsLiveData = MutableLiveData<MutableList<Int>>(ids)
+    private val idsLiveData = MutableLiveData(ids)
 
 
     override fun onCreateView(
@@ -48,14 +39,12 @@ class LikedFragment : Fragment() {
         detailsViewModel = obtainViewModel(this)
         detailsViewModel.getAllData().observe(viewLifecycleOwner) { events ->
             if (events.isNullOrEmpty()) {
-                Log.d("IdsNull", "IDS  Is Null")
                 binding.likedStatus.visibility = View.VISIBLE
                 binding.rvReview.visibility = View.INVISIBLE
-                binding.likedStatus.text = "No Data Found..."
+                binding.likedStatus.text = getString(R.string.event_notfound)
             }else {
                 ids.clear()
-                events.forEachIndexed { index, event ->
-                    Log.d("eventId", "index ke: ${index} \n id: ${event.id}: ")
+                events.forEachIndexed { _, event ->
                     ids.add(event.id)
                 }
 
@@ -64,11 +53,7 @@ class LikedFragment : Fragment() {
                     LikedViewModelFactory(idsLiveData)
                 )[LikedViewModel::class.java]
                 likedViewModel.updateIds(ids)
-                // Observe the events list from likedViewModel setelah ViewModel diinisialisasi
                 likedViewModel.eventsResponseList.observe(viewLifecycleOwner) { likedEvents ->
-                    likedEvents.forEachIndexed { index, event ->
-                        Log.d("EventFromApi", "id: ${event.id} \n desc: ${event.description}")
-                    }
                     setReviewData(likedEvents)
                 }
                 likedViewModel.isLoading.observe(viewLifecycleOwner) {
@@ -93,7 +78,7 @@ class LikedFragment : Fragment() {
     private fun obtainViewModel(activity: LikedFragment): DetailsViewModel {
         val application = requireActivity().application
         val factory = ViewModelFactory.getInstance(application)
-        return ViewModelProvider(activity, factory).get(DetailsViewModel::class.java)
+        return ViewModelProvider(activity, factory)[DetailsViewModel::class.java]
     }
 
     override fun onDestroyView() {

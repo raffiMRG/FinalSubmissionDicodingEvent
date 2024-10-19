@@ -13,17 +13,13 @@ interface ApiService {
     fun getActiveEvents(
         @Query("active") active: String
     ): Call<EventsResponse>
-}
 
-interface ApiSearch {
     @GET("events")
     fun getsearchEvents(
         @Query("active") active: String,
         @Query("q") query: String
     ): Call<EventsResponse>
-}
 
-interface ApiSearchById {
     @GET("events/{id}")
     fun getEventById(
         @Path("id") id: Int,
